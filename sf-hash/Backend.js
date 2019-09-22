@@ -22,15 +22,28 @@ class Backend {
     this.data = data
   }
 
+/**
+ * fastHash(){
+ *  this.result.account = this.data.account
+ *  this.result.password = hmac(this.serverSalt, this.data.newPassword, {alg:'md5', repeat: 1})
+ *}
+ */
   fastHash(){
     /**
      * @input-params this.data
      * @input-params this.serverSalt
      * @modify-params this.result
      */
-    this.result = {/* TODO */}
+    this.result.password = hmac(this.serverSalt, this.data.newPassword, {alg:'md5', repeat: 1})
+	this.result.account = this.data.account;
   }
-
+/**
+ * checkDatabase(){
+ *  ...
+ *    checkFlag = res.password === hmac(this.serverSalt, this.data.password, {alg:'md5', repeat: 1})
+ *  ...
+ * }
+ */
   checkDatabase(){
     /**
      * @input-params this.result
@@ -40,6 +53,7 @@ class Backend {
     let checkFlag = false
     if(res != null){
       checkFlag = null /* TODO */
+		checkFlag = res.password === hmac(this.serverSalt, this.data.password, {alg:'md5', repeat: 1})
     } else {
       // If acount doesn't exist, create a new account
       this.register()
@@ -48,14 +62,23 @@ class Backend {
     return checkFlag
   }
 
+/**
+ * updateDatabase(){
+ *  ...
+ *    this.store[account].password = this.result.password
+ *    this.store[account].salt = this.data.newSalt
+ *  ...
+ * }
+ */
+
   updateDatabase(){
     /**
      * @modify-params this.result
      */
     let account = this.result.account
 
-    this.store[account].password = null /* TODO */
-    this.store[account].salt = null /* TODO */
+    this.store[account].password = hmac(this.serverSalt, this.data.newPassword, {alg:'md5', repeat: 1}) /* TODO */
+    this.store[account].salt = this.data.newSalt /* TODO */
   }
 
   query(account){
@@ -99,23 +122,8 @@ module.exports = Backend;
 
 
 
-/**
- * checkDatabase(){
- *  ...
- *    checkFlag = res.password === hmac(this.serverSalt, this.data.password, {alg:'md5', repeat: 1})
- *  ...
- * }
- */
 
 
-/**
- * updateDatabase(){
- *  ...
- *    this.store[account].password = this.result.password
- *    this.store[account].salt = this.data.newSalt
- *  ...
- * }
- */
 
 
 /**
